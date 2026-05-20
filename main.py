@@ -1,9 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-options = webdriver.ChromeOptions()
-options.add_experimental_option("detach", True)
-driver=webdriver.Chrome(options=options)
+#KEEP BROWSER OPEN
+# options = webdriver.ChromeOptions()
+# options.add_experimental_option("detach", True)
+driver=webdriver.Chrome()
 driver.get("https://cad.chp.ca.gov/")
 
 def reach_page():
@@ -18,11 +19,15 @@ def accident_type():
     return driver.find_elements(by=By.TAG_NAME, value="td")
     
     
-
+events = []
 
 driver.implicitly_wait(0.5)
-reach_page()
 
+reach_page()
 list = accident_type()
 
-print(f"List: {list}")
+allText = ""
+for row in list:
+    allText = allText + f"{row.text}"
+    
+print(allText)
