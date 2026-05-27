@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 CommunicationCenter = "Los Angeles"
-
 #KEEP BROWSER OPEN
 # options = webdriver.ChromeOptions()
 # options.add_experimental_option("detach", True)
@@ -15,49 +14,54 @@ def reach_page(driver):
     firstBox.send_keys(CommunicationCenter)
     submit.click()
     
+    #6 elements per row
+def accident_type(driver, collection):
+    table = driver.find_elements(by=By.CLASS_NAME, value="gvRow")
+    blueRows = driver.find_elements(by=By.CLASS_NAME, value="gvAltRow")
+    table.extend(blueRows)
     
-def accident_type(driver):
-    br = driver.find_elements(by=By.TAG_NAME, value="td")
-    allFields = ""
-    for cell in br:
-        allFields = allFields + cell.text
+    for child in table:
+        columns = child.find_elements(by=By.TAG_NAME, value="td")
         
-    return allFields.split("Details")
-    
-def getTime(collection, time):    
-    length = len(collection)
-    #Trimming the No. from each row; if/elif is for the ones that have 2 digits in hour
-    for i in range(0, length):
-        if collection[i][1:2] == ':':
-            time.append(collection[i][:7])
-        elif collection[i][2:3] == ':':
-            time.append(collection[i][:8])
-
-def getType(collection, type):
-    length = len(collection)
-    collection = ""
-    
-    # for i in range(0, length):
-        
-        
+        for c in columns:
+            collection.append(c.text)
+            
 
 def main():
     driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("detach", True)
+
     reach_page(driver)
 
-    collection = accident_type(driver)
+    rows = []
+    accident_type(driver, rows)
     
-    for c in collection:
-        c = c[4:]
-        print(c)
-            
+    #six elements per row
+    
     time = []
-    getTime(collection, time)
-    
     type = []
-    getType(collection, type)
+    location = []
+    area = []
     
-    # print(time)
+    length = len(rows)
+    
+    for i in range(0, length):
+        cell = rows[i]
+        for j in range(0, 120):
+            if i == 2 + (7 * j):
+                time.append(cell)
+            if i == 3 + (7 * j):
+                type.append(cell)
+            if i == 4 + (7 * j):
+                location.append(cell)
+            if i == 6 + (7 * j):
+                area.append(cell)
+        
+    print(time)
+    print(type)
+    print(location)
+    print(area)
     
     
     
