@@ -26,11 +26,47 @@ def accident_type(driver, collection):
         for c in columns:
             collection.append(c.text)
             
+def fillArrays(time, type, location, area, rows):
+    length = len(rows)
+    
+    for i in range(0, length):
+        cell = rows[i]
+        for j in range(0, 120):
+            if i == 2 + (7 * j):
+                time.append(cell)
+            if i == 3 + (7 * j):
+                type.append(cell)
+            if i == 4 + (7 * j):
+                location.append(cell)
+            if i == 6 + (7 * j):
+                area.append(cell)            
+
+    
+    """
+    class Solution {
+        public int[] twoSum(int[] nums, int target) {
+            HashMap<Integer, Integer> map = new HashMap<>();
+        
+            for (int i = 0; i < nums.length; i++) {
+                int key = target - nums[i];
+                if (map.containsKey(key)) {
+                    return new int[] {map.get(key), i};
+                } else {
+                    map.put(nums[i], i);
+                }
+            }
+        
+            return new int[] {};
+        }
+    }
+    """
+    
+            
 
 def main():
-    driver = webdriver.Chrome()
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
+    driver = webdriver.Chrome()
 
     reach_page(driver)
 
@@ -44,20 +80,8 @@ def main():
     location = []
     area = []
     
-    length = len(rows)
-    
-    for i in range(0, length):
-        cell = rows[i]
-        for j in range(0, 120):
-            if i == 2 + (7 * j):
-                time.append(cell)
-            if i == 3 + (7 * j):
-                type.append(cell)
-            if i == 4 + (7 * j):
-                location.append(cell)
-            if i == 6 + (7 * j):
-                area.append(cell)
-        
+    fillArrays(time, type, location, area, rows)
+            
     print(time)
     print(type)
     print(location)
