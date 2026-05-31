@@ -22,6 +22,7 @@ def reach_page(driver):
     submit.click()
     
     #6 elements per row
+
 def accident_type(driver, collection):
     table = driver.find_elements(by=By.CLASS_NAME, value="gvRow")
     blueRows = driver.find_elements(by=By.CLASS_NAME, value="gvAltRow")
@@ -33,7 +34,7 @@ def accident_type(driver, collection):
         for c in columns:
             collection.append(c.text)
             
-def fillArrays(time, type, location, area, rows):
+def getData(time, type, location, area, rows):
     length = int(len(rows) / 7)
     map = {}
     
@@ -84,31 +85,30 @@ def fillArrays(time, type, location, area, rows):
     }
     """
     
-            
+def querySequence(driver, rows, time, type, location, area):
+    reach_page(driver)
+    accident_type(driver, rows)
+    getData(time, type, location, area, rows)
 
 def main():
     options = webdriver.ChromeOptions()
     options.add_experimental_option("detach", True)
     driver = webdriver.Chrome()
 
-    reach_page(driver)
-
     rows = []
-    accident_type(driver, rows)
-    
-    #six elements per row
-    
     time = []
     type = []
     location = []
     area = []
-    
-    fillArrays(time, type, location, area, rows)
+
+
+    querySequence(driver, rows, time, type, location, area)
             
-    print(time)
-    print(type)
-    print(location)
-    print(area)
+    NL = "\n"
+    print(f"{time}{NL}")
+    print(f"{type}{NL}")
+    print(f"{location}{NL}")
+    print(f"{area}{NL}")
     
     
     
